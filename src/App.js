@@ -10,18 +10,19 @@ function Square({value, onSquareClick}){
 }
 
 
+
+
 export default function Board(){
 
   const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true)
+  const [xIsNext, setXIsNext] = useState(true);
 
-
+ 
 
   function handleClick(i) {
-   
 
-    if(squares[i]){
-      return
+    if(squares[i] || checkWinner(squares) ){  //here checkWinner will stop the match because when the winner is selected it will make it 1 and thus return nothing
+      return;
     }
   
     const nextSquares = squares.slice();
@@ -38,12 +39,43 @@ export default function Board(){
     }
 
     setSquares(nextSquares);
-    
+
   }
 
+  function checkWinner(squares){
+    const possibleWinArrays = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ]
+
+    for (let i = 0; i < possibleWinArrays.length; i++) {
+      const [a,b,c] = possibleWinArrays[i];
+      if(squares[a]&& squares[a]===squares[b] && squares[b]===squares[c]){
+          return squares[a];
+      }
+    }
+    return null;
+}
+
+
+// the below code is used to change the text on winner
+let winnerName;
+let value = checkWinner(squares);
+if(value){
+  winnerName = "Congrats " + value + " is the winner !!"
+}
+
+  
   return (
   <>
-  <div className="board">
+    <h2>{winnerName}</h2>
+    <div className="board">
     <div className="boardRow">
       <Square value={squares[0]} onSquareClick={()=> handleClick(0)} />
       <Square value={squares[1]} onSquareClick={()=> handleClick(1)}/>
