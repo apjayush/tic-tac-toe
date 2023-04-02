@@ -10,8 +10,7 @@ function Square({value, onSquareClick}){
 }
 
 
-
-
+// the below is the board component
 export default function Board(){
 
   const [squares, setSquares] = useState(Array(9).fill(null));
