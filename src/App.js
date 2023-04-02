@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 function Square({value, onSquareClick}){
 
-  return <button className='square' onClick={onSquareClick}>{value}</button>
+  return <button className={`square ${value === 'X' ? 'x' : value === 'O' ? 'o' : ''}`} onClick={onSquareClick}>{value}</button>
 
 }
 
@@ -16,8 +16,6 @@ export default function Board(){
 
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
-
- 
 
   function handleClick(i) {
 
@@ -70,11 +68,15 @@ let value = checkWinner(squares);
 if(value){
   winnerName = "Congrats " + value + " is the winner !!"
 }
+else{
+  winnerName = "Welcome to the game";
+}
 
   
   return (
   <>
-    <h2>{winnerName}</h2>
+    <div className="container">
+    <div className= {`${winnerName === 'winnerName' ? 'x' : 'text'}`}>{winnerName}</div>
     <div className="board">
     <div className="boardRow">
       <Square value={squares[0]} onSquareClick={()=> handleClick(0)} />
@@ -93,8 +95,13 @@ if(value){
     </div>
     
   </div>
+    </div>
+   
  
   </>
   );
 }
 
+
+
+// checkWinner can be accessed even it is defined outside the handleClick because it is defined inside the Board component
