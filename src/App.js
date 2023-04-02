@@ -18,10 +18,16 @@ export default function Board(){
 
 
   function handleClick(i) {
+   
+
+    if(squares[i]){
+      return
+    }
+  
     const nextSquares = squares.slice();
     // nextSquares is the copy of the square array
 
-     // alternate O and X code is below if the first value is X then the second square will be O
+      // alternate O and X code is below if the first value is X then the second square will be O
      if(!xIsNext){
       nextSquares[i] = "O";
       setXIsNext(true)
@@ -30,8 +36,9 @@ export default function Board(){
       nextSquares[i] = "X";
       setXIsNext(false)
     }
-    
+
     setSquares(nextSquares);
+    
   }
 
   return (
