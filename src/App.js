@@ -21,11 +21,16 @@ export default function Board(){
     const nextSquares = squares.slice();
     // nextSquares is the copy of the square array
 
-
-
-   
+     // alternate O and X code is below if the first value is X then the second square will be O
+     if(!xIsNext){
+      nextSquares[i] = "O";
+      setXIsNext(true)
+    }
+    else{
+      nextSquares[i] = "X";
+      setXIsNext(false)
+    }
     
-    nextSquares[i] = "X";
     setSquares(nextSquares);
   }
 
