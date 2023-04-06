@@ -11,10 +11,8 @@ function Square({value, onSquareClick}){
 
 
 // the below is the board component
-export default function Board(){
+function Board({ xIsNext, squares, onPlay }){
 
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
 
   function handleClick(i) {
 
@@ -28,14 +26,12 @@ export default function Board(){
       // alternate O and X code is below if the first value is X then the second square will be O
      if(!xIsNext){
       nextSquares[i] = "O";
-      setXIsNext(true)
     }
     else{
       nextSquares[i] = "X";
-      setXIsNext(false)
     }
 
-    setSquares(nextSquares);
+    onPlay(nextSquares);
 
   }
 
@@ -71,7 +67,6 @@ else{
   winnerName = "Welcome to the game";
 }
 
-  
   return (
   <>
     <div className="container">
@@ -101,6 +96,58 @@ else{
   );
 }
 
+
+export default function Game() {
+
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+  // const currentSquares = history[history.length - 1];
+  const currentSquares = history[currentMove];
+
+
+  // handlePlay function inside the Game component  will be called by the Board component to update the game
+  function handlePlay(nextSquares) {
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+  setCurrentMove(nextHistory.length - 1);
+  setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove){
+    setCurrentMove(nextMove);
+    setXIsNext(nextMove % 2 === 0);
+  }
+
+
+  // You’ll use map to transform your history of moves into React elements representing buttons on the screen, and display a list of buttons to “jump” to past moves. Let’s map over the history in the Game component:
+  const moves = history.map((squares, move) =>{
+    let description;
+    if(move > 0){
+      description = "Go to move #" + move;
+    }
+    else {
+      description = 'Go to game start';
+    }
+
+    return (
+      <li key={move}>
+      <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+      <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
 
 
 // checkWinner can be accessed even it is defined outside the handleClick because it is defined inside the Board component
